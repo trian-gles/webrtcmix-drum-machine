@@ -1,21 +1,74 @@
 const { useState } = React;
 
+
+
+const GetSnareScore = (params) =>
+{
+	let dur = params[0];
+	let noiseamp = params[1];
+	let toneamp = params[2];
+	let curvature = params[3];
+	let bp1freq = params[4];
+	let bp2freq = params[5];
+	let bpIndex = params[6];
+	let carrier = params[6];
+	let modulator = params[7];
+	let index = params[8];
+	return `load("FMINST")
+load("NOISE")
+load("BUTTER")
+load("EQ")
+  
+bus_config("NOISE", "aux 0 out")
+bus_config("EQ", "aux 0 in" ,"aux 1 out")
+bus_config("FMINST", "aux 1 out")
+bus_config("BUTTER", "aux 1 in", "out 0-1")
+  
+  
+dur = ${dur}
+bpCurvature = ${curvature}
+bp1freq = ${bp1freq}
+bp2freq = ${bp2freq}
+bpIndex = ${bpIndex}
+noiseamp = ${noiseamp}
+toneamp = ${toneamp}
+carfreq = ${carrier}
+modfreq = ${modulator}
+index = ${index}
+ 
+
+env = maketable("line", 512, 0, 1, 1, 0)
+wavetable = maketable("wave", 1000, "sine")
+FMINST(0, dur, toneamp * env * env, carfreq, modfreq, index, 0, 0.5,
+         wavetable, 1)
+
+NOISE(0.0, dur, noiseamp * env)
+  
+EQ(0, 0, dur, 1, 2, 0, 1, 0, 100, 1, 1)
+
+filt1 = maketable("curve", "nonorm", 512, 0, 8000, bpCurvature, 64, 100)
+BUTTER(0, 0, dur * 2, 1, 3, 3, 0, 0, 0.5, 0, filt1, 2000)
+filt2 = maketable("curve", "nonorm", 512, 0, 5000, bpCurvature, 64, 200)
+BUTTER(0, 0, dur * 2, 1, 3, 3, 0, 0, 0.5, 0, filt2, 2000)`
+}
+
 const GetKickScore = (params) => 
 {
   let dur = params[0];
   let freq = params[1];
   let freqSpike = params[2];
   let curvature = params[3];
+  let attack = params[4];
   return `load("WAVETABLE")
 dur = ${dur}
 
-attack = 0.025
+attack = ${attack}
 curvature = ${curvature}
 basefreq = ${freq}
 peakfreq = ${freqSpike}
   
-ampenv = maketable("line", 256, 0, 0, round(attack * 32 / dur), 1, 32, 0)
-pitchenv = maketable("curve", 256, 0, 0, curvature, round(attack * 32 / dur), 1, curvature, 32, 0)
+ampenv = maketable("line", 512, 0, 0, round(attack * 64 / dur), 1, 64, 0)
+pitchenv = maketable("curve", 512, 0, 0, curvature, round(attack * 64 / dur), 1, curvature, 64, 0)
 WAVETABLE(0, dur, 30000 * ampenv, basefreq + (peakfreq * pitchenv), 0.5)`
 }
 
@@ -24,11 +77,44 @@ const kickInst = {
   "key": "q",
   "keycode": "81",
   "sliders": 
-  [{"name": "dur", "min": 0, "max": 2, "init": 1, "step": 0.1}, 
-   {"name": "base freq", "min": 20, "max": 200, "init": 70, "step": 1},
-   {"name": "freq spike", "min": 20, "max": 200, "init": 70, "step": 1},
-  {"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1}],
+  [	{"name": "dur", "min": 0, "max": 2, "init": 1, "step": 0.1}, 
+	{"name": "base freq", "min": 20, "max": 200, "init": 70, "step": 1},
+	{"name": "freq spike", "min": 20, "max": 200, "init": 70, "step": 1},
+	{"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1},
+	{"name": "attack speed", "min": 0, "max": 0.05, "init": 0.025, "step": 0.005}],
   "scoreFunc": GetKickScore
+}
+
+//let dur = params[0];
+//	let noiseamp = params[1];
+//	let toneamp = params[2];
+//	let curvature = params[3];
+//	let bp1freq = params[4];
+//	let bp2freq = params[5];
+//	let bpIndex = params[6];
+//	let carrier = params[6];
+//	let modulator = params[7];
+//	let index = params[8];
+
+
+
+const snareInst = {
+  "name": "snare",
+  "key": "w",
+  "keycode": "87",
+  "sliders": 
+  [	{"name": "dur", "min": 0, "max": 2, "init": 1, "step": 0.1}, 
+	{"name": "noise amp", "min": 0, "max": 30000, "init": 20000, "step": 100},
+	{"name": "tone amp", "min": 0, "max": 30000, "init": 20000, "step": 100},
+	{"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1},
+	{"name": "bp1 high freq", "min": 1000, "max": 10000, "init": 8000, "step": 50},
+	{"name": "bp2 high freq", "min": 1000, "max": 10000, "init": 5000, "step": 50},
+	{"name": "bp index", "min": 0, "max": 10000, "init": 1000, "step": 50},
+	{"name": "carrier freq", "min": 50, "max": 500, "init": 150, "step": 1},
+	{"name": "mod freq", "min": 20, "max": 200, "init": 50, "step": 1},
+	{"name": "mod index", "min": 1, "max": 50, "init": 30, "step": 1}
+	],
+  "scoreFunc": GetSnareScore
 }
 
 const apiURL = 'https://timeout2-ovo53lgliq-uc.a.run.app';
@@ -96,6 +182,7 @@ function Sound({inst}) {
   
   const handleClickRender = () => {
     const score = inst.scoreFunc(sliderStates);
+	console.log(score);
     SendScore(score).then(objectURL => 
     {
       const audioTag = document.getElementById(inst.name);
@@ -112,7 +199,7 @@ function Sound({inst}) {
   
   
   return (
-    <div>
+    <div className="border border-dark rounded">
       <h4>{inst.name}</h4>
       {sliders}
       <RenderPlay id={inst.name} params={sliderStates} HandleClickRender={handleClickRender} HandleClickPlay={handleClickPlay} rendered={rendered}/>
@@ -121,4 +208,12 @@ function Sound({inst}) {
   )
 }
 
-ReactDOM.render(<Sound inst={kickInst}/>, document.getElementById("root"));
+function App(){
+	return (
+	<div>
+		<Sound inst={kickInst}/><Sound inst={snareInst}/>
+	</div>
+	)
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
