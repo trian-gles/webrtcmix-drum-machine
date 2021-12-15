@@ -143,7 +143,7 @@ function RenderPlay({id, params, HandleClickRender, HandleClickPlay, rendered})
     }
   else {
       text = "Render";
-      btnType = "btn-primary";
+      btnType = "btn-warning";
       HandleClick = HandleClickRender;
     }
   
@@ -151,12 +151,12 @@ function RenderPlay({id, params, HandleClickRender, HandleClickPlay, rendered})
   return (
   <div className ={`btn ${btnType} p-4 m-3`} onClick = {HandleClick}> 
     {text}
-    <audio className="clip" id={id}/>
+    
   </div>)
 }
 
 function Sound({inst}) {
-  
+  const [active, setActive] = React.useState(false);
   const [rendered, setRendered] = React.useState(false);
   const sliderChange = (slider, setParamFunc) =>
   {
@@ -175,7 +175,7 @@ function Sound({inst}) {
       sliders.push(
         <div>
           <h6>{slider.name}</h6>
-          <input type="range" step={slider.step} value = {param} max={slider.max} min={slider.min} onChange={(e) => sliderChange(e, setParam)} className="w-50" />
+          <input type="range" step={slider.step} value = {param} max={slider.max} min={slider.min} onChange={(e) => sliderChange(e, setParam)} className="w-75" />
         </div>
       );
     }
@@ -192,6 +192,8 @@ function Sound({inst}) {
   }
   
   const handleClickPlay = () => {
+	setActive(true);
+	setTimeout(() => setActive(false), 200);
     const audioTag = document.getElementById(inst.name);
     audioTag.currentTime = 0;
     audioTag.play();
@@ -199,9 +201,10 @@ function Sound({inst}) {
   
   
   return (
-    <div className="border border-dark rounded">
+    <div className={`col-6 border border-dark rounded ${active && 'bg-warning'}`} align="center">
       <h4>{inst.name}</h4>
       {sliders}
+	  <audio className="clip" id={inst.name}/>
       <RenderPlay id={inst.name} params={sliderStates} HandleClickRender={handleClickRender} HandleClickPlay={handleClickPlay} rendered={rendered}/>
       
     </div>
@@ -210,7 +213,7 @@ function Sound({inst}) {
 
 function App(){
 	return (
-	<div>
+	<div className="row">
 		<Sound inst={kickInst}/><Sound inst={snareInst}/>
 	</div>
 	)
