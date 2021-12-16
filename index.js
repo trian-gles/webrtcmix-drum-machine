@@ -103,10 +103,10 @@ const snareInst = {
   "key": "w",
   "keycode": "87",
   "sliders": 
-  [	{"name": "dur", "min": 0, "max": 2, "init": 1, "step": 0.1}, 
+  [	{"name": "dur", "min": 0, "max": 2, "init": 0.2, "step": 0.1}, 
 	{"name": "noise amp", "min": 0, "max": 30000, "init": 20000, "step": 100},
-	{"name": "tone amp", "min": 0, "max": 30000, "init": 20000, "step": 100},
-	{"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1},
+	{"name": "tone amp", "min": 0, "max": 30000, "init": 8000, "step": 100},
+	{"name": "pitch env curve", "min": -100, "max": 0, "init": -79, "step": 1},
 	{"name": "bp1 high freq", "min": 1000, "max": 10000, "init": 8000, "step": 50},
 	{"name": "bp2 high freq", "min": 1000, "max": 10000, "init": 5000, "step": 50},
 	{"name": "bp index", "min": 0, "max": 10000, "init": 1000, "step": 50},
