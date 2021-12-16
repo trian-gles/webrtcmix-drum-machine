@@ -110,7 +110,7 @@ const tomInst = {
   "keycode": "89",
   "sliders": 
   [	{"name": "dur", "min": 0, "max": 2, "init": 1, "step": 0.1}, 
-	{"name": "base freq", "min": 100, "max": 150, "init": 70, "step": 1},
+	{"name": "base freq", "min": 100, "max": 350, "init": 150, "step": 1},
 	{"name": "freq spike", "min": 20, "max": 200, "init": 70, "step": 1},
 	{"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1},
 	{"name": "attack speed", "min": 0, "max": 0.025, "init": 0.01, "step": 0.005}],
