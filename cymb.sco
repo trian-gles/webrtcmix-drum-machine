@@ -8,11 +8,11 @@ bus_config("WAVETABLE", "aux 0 out")
 bus_config("EQ", "aux 0 in", "out 0-1")
   
 
-dur = 0.8 // 0.2-1.5
-decay = 200 //100-998
+dur = 0.2 // 0.2-1.5
+decay = 100 //100-998
 attack = 5 // 5-100
-filtfreq = 5000
-qmod = 10
+filtfreq = 2000
+qmod = 0
 squareamp = 1000
   
 ampenv = maketable("line", 1000, 0, 0, attack, 1, decay, 0.4, 999, 0)
