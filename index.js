@@ -1,5 +1,45 @@
 const { useState } = React;
 
+const GetCymbScore = (params) =>
+{
+	let dur = params[0]; // 0.2-1.5
+	let decay = params[1]; //100-998
+	let attack = params[2]; // 5-100
+	let filtfreq = params[3]; // 0 - 4000
+	let qmod = params[4]; // 0 - 20
+	let squareamp = params[5]; // 0 - 4000
+	return `load("NOISE")
+load("EQ")
+load("WAVETABLE")
+  
+  
+bus_config("NOISE", "aux 0 out")
+bus_config("WAVETABLE", "aux 0 out")
+bus_config("EQ", "aux 0 in", "out 0-1")
+  
+
+dur = ${dur}
+decay = ${decay}
+attack = ${attack}
+filtfreq = ${filtfreq}
+qmod = ${qmod}
+squareamp = ${squareamp}
+  
+ampenv = maketable("line", 1000, 0, 0, attack, 1, decay, 0.4, 999, 0)
+squaretable = maketable("wave", 1000, "square")
+for (i = 0; i < 6; i = i + 1)
+{
+  freq = 220 * (1 + i / 6) + rand() * 10
+  WAVETABLE(0, dur, squareamp*ampenv, freq, 0.5, squaretable)
+}
+
+NOISE(0.0, dur, 20000*ampenv)
+EQ(0, 0, dur, 1, "lowpass", 0, 0.5, 0, 7000 + filtfreq, 0.6 + qmod)
+EQ(0, 0, dur, 1, "highpass", 0, 0.5, 0, 6800 + filtfreq, 1.5 + qmod)
+EQ(0, 0, dur, 1, "highpass", 0, 0.5, 0, 6800 + filtfreq, 1.5 + qmod)
+EQ(0, 0, dur, 1, "highpass", 0, 0.5, 0, 1200 + filtfreq, 1.5 + qmod)`
+}
+
 
 
 const GetSnareScore = (params) =>
@@ -73,7 +113,7 @@ WAVETABLE(0, dur, 30000 * ampenv, basefreq + (peakfreq * pitchenv), 0.5)`
 }
 
 const kickInst = {
-  "name": "kick",
+  "name": "Kick",
   "key": "q",
   "keycode": "81",
   "sliders": 
@@ -86,7 +126,7 @@ const kickInst = {
 }
 
 const snareInst = {
-  "name": "snare",
+  "name": "Snare",
   "key": "w",
   "keycode": "87",
   "sliders": 
@@ -105,7 +145,7 @@ const snareInst = {
 }
 
 const tomInst = {
-  "name": "tom",
+  "name": "Tom",
   "key": "e",
   "keycode": "89",
   "sliders": 
@@ -115,6 +155,20 @@ const tomInst = {
 	{"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1},
 	{"name": "attack speed", "min": 0, "max": 0.025, "init": 0.01, "step": 0.005}],
   "scoreFunc": GetKickScore
+}
+
+const cymbInst = {
+  "name": "Cymbal",
+  "key": "a",
+  "keycode": "89",
+  "sliders": 
+  [	{"name": "dur", "min": 0, "max": 2, "init": 0.4, "step": 0.1},
+  {"name": "decay", "min": 100, "max": 998, "init": 200, "step": 1}, 
+	{"name": "attack", "min": 5, "max": 100, "init": 20, "step": 1},
+	{"name": "filter freq mod", "min": 0, "max": 4000, "init": 70, "step": 10},
+	{"name": "q mod", "min": 0, "max": 20, "init": 0, "step": 0.5},
+	{"name": "square amp", "min": 0, "max": 4000, "init": 2000, "step": 10}],
+  "scoreFunc": GetCymbScore
 }
 
 const apiURL = 'https://timeout2-ovo53lgliq-uc.a.run.app';
@@ -216,7 +270,7 @@ function Sound({inst}) {
 function App(){
 	return (
 	<div className="row">
-		<Sound inst={kickInst}/><Sound inst={snareInst}/><Sound inst={tomInst}/>
+		<Sound inst={kickInst}/><Sound inst={snareInst}/><Sound inst={tomInst}/><Sound inst={cymbInst}/>
 	</div>
 	)
 }
