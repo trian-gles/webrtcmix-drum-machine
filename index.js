@@ -104,7 +104,18 @@ const snareInst = {
   "scoreFunc": GetSnareScore
 }
 
-const 
+const tomInst = {
+  "name": "tom",
+  "key": "e",
+  "keycode": "89",
+  "sliders": 
+  [	{"name": "dur", "min": 0, "max": 2, "init": 1, "step": 0.1}, 
+	{"name": "base freq", "min": 100, "max": 150, "init": 70, "step": 1},
+	{"name": "freq spike", "min": 20, "max": 200, "init": 70, "step": 1},
+	{"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1},
+	{"name": "attack speed", "min": 0, "max": 0.025, "init": 0.01, "step": 0.005}],
+  "scoreFunc": GetKickScore
+}
 
 const apiURL = 'https://timeout2-ovo53lgliq-uc.a.run.app';
 
@@ -205,7 +216,7 @@ function Sound({inst}) {
 function App(){
 	return (
 	<div className="row">
-		<Sound inst={kickInst}/><Sound inst={snareInst}/>
+		<Sound inst={kickInst}/><Sound inst={snareInst}/><Sound inst={tomInst}/>
 	</div>
 	)
 }
