@@ -174,9 +174,9 @@ function Sound({inst}) {
       sliderFuncs.push(setParam);
       sliders.push(
         <div  className="w-75">
-			<input className="w-100" type="range" step={slider.step} value = {param} max={slider.max} min={slider.min} onChange={(e) => sliderChange(e, setParam)} />
-			<div className="d-flex justify-content-between">
-				<p>{slider.name}</p><p>{param}</p>
+			<input className="w-100 mb-0 pb-0" type="range" step={slider.step} value = {param} max={slider.max} min={slider.min} onChange={(e) => sliderChange(e, setParam)} />
+			<div className="d-flex justify-content-between mt-0 pt-0">
+				<p className="mt-0 pt-0">{slider.name}</p><p  className="mt-0 pt-0">{param}</p>
 			</div>
 		</div>
       );
