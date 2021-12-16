@@ -81,22 +81,9 @@ const kickInst = {
 	{"name": "base freq", "min": 20, "max": 200, "init": 70, "step": 1},
 	{"name": "freq spike", "min": 20, "max": 200, "init": 70, "step": 1},
 	{"name": "pitch env curve", "min": -100, "max": 0, "init": -9, "step": 1},
-	{"name": "attack speed", "min": 0, "max": 0.05, "init": 0.025, "step": 0.005}],
+	{"name": "attack speed", "min": 0, "max": 0.025, "init": 0.01, "step": 0.005}],
   "scoreFunc": GetKickScore
 }
-
-//let dur = params[0];
-//	let noiseamp = params[1];
-//	let toneamp = params[2];
-//	let curvature = params[3];
-//	let bp1freq = params[4];
-//	let bp2freq = params[5];
-//	let bpIndex = params[6];
-//	let carrier = params[6];
-//	let modulator = params[7];
-//	let index = params[8];
-
-
 
 const snareInst = {
   "name": "snare",
@@ -106,7 +93,7 @@ const snareInst = {
   [	{"name": "dur", "min": 0, "max": 2, "init": 0.2, "step": 0.1}, 
 	{"name": "noise amp", "min": 0, "max": 30000, "init": 20000, "step": 100},
 	{"name": "tone amp", "min": 0, "max": 30000, "init": 8000, "step": 100},
-	{"name": "pitch env curve", "min": -100, "max": 0, "init": -79, "step": 1},
+	{"name": "pitch env curve", "min": -200, "max": -20, "init": -79, "step": 1},
 	{"name": "bp1 high freq", "min": 1000, "max": 10000, "init": 8000, "step": 50},
 	{"name": "bp2 high freq", "min": 1000, "max": 10000, "init": 5000, "step": 50},
 	{"name": "bp index", "min": 0, "max": 10000, "init": 1000, "step": 50},
@@ -116,6 +103,8 @@ const snareInst = {
 	],
   "scoreFunc": GetSnareScore
 }
+
+const 
 
 const apiURL = 'https://timeout2-ovo53lgliq-uc.a.run.app';
 
@@ -173,7 +162,7 @@ function Sound({inst}) {
       sliderStates.push(param);
       sliderFuncs.push(setParam);
       sliders.push(
-        <div  className="w-75">
+        <div className="w-75">
 			<input className="w-100 mb-0 pb-0" type="range" step={slider.step} value = {param} max={slider.max} min={slider.min} onChange={(e) => sliderChange(e, setParam)} />
 			<div className="d-flex justify-content-between mt-0 pt-0">
 				<p className="mt-0 pt-0">{slider.name}</p><p  className="mt-0 pt-0">{param}</p>
