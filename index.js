@@ -203,7 +203,7 @@ function Sound({inst}) {
   
   
   return (
-    <div className={`col-6 border border-dark rounded ${active && 'bg-warning'}`} align="center">
+    <div className={`col border border-dark rounded ${active && 'bg-warning'}`} align="center">
       <h4>{inst.name}</h4>
       {sliders}
 	  <audio className="clip" id={inst.name}/>
