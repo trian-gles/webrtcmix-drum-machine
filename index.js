@@ -230,7 +230,7 @@ function Sound({inst}) {
         <div className="w-75">
 			<input className="w-100 mb-0 pb-0" type="range" step={slider.step} value = {param} max={slider.max} min={slider.min} onChange={(e) => sliderChange(e, setParam)} />
 			<div className="d-flex justify-content-between mt-0 pt-0">
-				<p className="mt-0 pt-0">{slider.name}</p><p  className="mt-0 pt-0">{param}</p>
+				<p className="mt-0 pt-0 text-white">{slider.name}</p><p  className="mt-0 pt-0 text-white">{param}</p>
 			</div>
 		</div>
       );
@@ -255,22 +255,36 @@ function Sound({inst}) {
     audioTag.play();
   }
   
+  let bkgcolor;
+  if (active)
+  {
+	  bkgcolor = 'bg-warning';
+  }
+  else 
+  {
+	  bkgcolor = 'bg-dark';
+  }
   
   return (
-    <div className={`col border border-dark rounded ${active && 'bg-warning'}`} align="center">
-      <h4>{inst.name}</h4>
+  <div className = "col px-3">
+    <div className={`border border-dark rounded ${bkgcolor}`} align="center">
+      <h4 className="text-white">{inst.name}</h4>
       {sliders}
 	  <audio className="clip" id={inst.name}/>
       <RenderPlay id={inst.name} params={sliderStates} HandleClickRender={handleClickRender} HandleClickPlay={handleClickPlay} rendered={rendered}/>
       
     </div>
+  </div>
   )
 }
 
 function App(){
 	return (
-	<div className="row">
-		<Sound inst={kickInst}/><Sound inst={snareInst}/><Sound inst={tomInst}/><Sound inst={cymbInst}/>
+	<div className="row bg-secondary">
+		<h4 className="text-center">WebRTcmix Drum Machine</h4>
+		<div className="row bg-secondary">
+			<Sound inst={kickInst}/><Sound inst={snareInst}/><Sound inst={tomInst}/><Sound inst={cymbInst}/>
+		</div>
 	</div>
 	)
 }
